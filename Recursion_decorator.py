@@ -1,15 +1,15 @@
 from functools import wraps
 
 
-def memoization(func)
+def memoization(func):
     # 缓存装饰器
     cache = {}
     miss = object()
 
     @wraps(func)
-    def wrapper(args)
+    def wrapper(args):
         result = cache.get(args, miss)
-        if result is miss
+        if result is miss:
             result = func(args)
             cache[args] = result
         return result
@@ -18,12 +18,12 @@ def memoization(func)
 
 
 @memoization
-def fib(n)
-    if n == 0 or n == 1
+def fib(n):
+    if n == 0 or n == 1:
         return 1
-    else
+    else:
         return fib(n - 1) + fib(n - 2)
 
 
-if __name__ == __main__
+if __name__ == '__main__':
     print(fib(9))
