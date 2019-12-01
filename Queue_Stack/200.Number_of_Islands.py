@@ -10,24 +10,25 @@
 
 from collections import deque
 
+# BFS
+
 
 class Solution:
-
-    def numIslands(self, grid):
+    def numIslands(self, grid: List[List[str]]) -> int:
 
         try:
-            r = 0
             m = len(grid)
             n = len(grid[0])
-            around = ((0, 1), (1, 0), (0, -1), (-1, 0))
         except BaseException:
             return 0
+
+        r = 0
+        around = ((0, 1), (1, 0), (0, -1), (-1, 0))
 
         for i in range(m):
             for j in range(n):
                 if int(grid[i][j]):
                     r += 1
-
                     # ---------------------------BFS 开始------------------------
                     # 把根节点投入队列
                     q = deque([])
@@ -46,4 +47,32 @@ class Solution:
                                 q.append((a, b))
                     # ----------------------------------------------------------------
 
+        return r
+
+
+# DFS
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        try:
+            m = len(grid)
+            n = len(grid[0])
+        except BaseException:
+            return 0
+
+        # -------------------------DFS 开始------------------------
+        # 定义dfs递归方程
+        around = ((1, 0), (0, -1), (-1, 0), (0, 1))
+
+        def dfs(i, j):
+            if 0 <= i < m and 0 <= j < n and int(grid[i][j]):
+                grid[i][j] = '0'
+                for a, b in around:
+                    dfs(a + i, b + j)
+
+        r = 0
+        for i in m:
+            for j in n:
+                if int(grid[i][j]):
+                    r += 1
+                    dfs(i, j)
         return r
