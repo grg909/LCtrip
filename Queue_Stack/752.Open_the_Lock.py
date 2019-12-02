@@ -8,7 +8,6 @@
 
 """
 
-
 from collections import deque
 
 
@@ -35,8 +34,8 @@ class Solution:
             # 放入周围节点
             for i in range(4):
                 for add in (1, -1):
-                    cur = node[:i] + str((int(node[i]) + add) %
-                                         10) + node[i + 1:]
+                    cur = node[:i] + str(
+                        (int(node[i]) + add) % 10) + node[i + 1:]
                     if cur == target:
                         return step
                     if cur not in deadends:

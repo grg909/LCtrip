@@ -12,6 +12,7 @@
 
 
 class Solution:
+
     def findTargetSumWays(self, nums: List[int], S: int) -> int:
 
         # 定义方法有点像排列组合back tracking？
