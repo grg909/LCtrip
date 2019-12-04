@@ -16,8 +16,8 @@
 #         self.right = None
 
 
-# iterative
-class Solution:
+# iterative dfs
+class Solution1:
 
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         res = []
@@ -38,8 +38,8 @@ class Solution:
         return res
 
 
-# recursive
-class Solution:
+# recursive dfs
+class Solution2:
 
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         res = []
