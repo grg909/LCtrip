@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-# @Date    : 2019/12/4
+# @Date    : 2019/12/5
 # @Author  : WANG JINGE
 # @Email   : wang.j.au@m.titech.ac.jp
 # @Language: python 3.7
@@ -20,7 +20,7 @@ from collections import deque
 
 class Solution:
 
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
 
         if not root:
             return []
@@ -36,8 +36,7 @@ class Solution:
                     q.append(node.left)
                     q.append(node.right)
                     current_layer.append(node.val)
-
             if current_layer:
                 res.append(current_layer)
 
-        return res
+        return res[::-1]

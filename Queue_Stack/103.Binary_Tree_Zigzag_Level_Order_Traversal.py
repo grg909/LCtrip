@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-# @Date    : 2019/12/4
+# @Date    : 2019/12/5
 # @Author  : WANG JINGE
 # @Email   : wang.j.au@m.titech.ac.jp
 # @Language: python 3.7
@@ -20,13 +20,14 @@ from collections import deque
 
 class Solution:
 
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
 
         if not root:
             return []
 
         res = []
         q = deque([root])
+        flag = 0
 
         while q:
             current_layer = []
@@ -37,7 +38,11 @@ class Solution:
                     q.append(node.right)
                     current_layer.append(node.val)
 
+            # 插入时才改变每层顺序
             if current_layer:
+                if flag:
+                    current_layer = current_layer[::-1]
                 res.append(current_layer)
+                flag ^= 1
 
         return res

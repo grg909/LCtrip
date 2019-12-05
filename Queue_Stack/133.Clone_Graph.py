@@ -17,7 +17,16 @@ class Node:
         self.neighbors = neighbors
 """
 
+# BFS， 此题非常好的训练代码结构
+# Thinking process:
+# 1. node -> nodes
+# 2. copy nodes
+# 3. copy edges
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
 
+
+# DFS
 class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
         d = {}
