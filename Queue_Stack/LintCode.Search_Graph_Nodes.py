@@ -36,3 +36,50 @@
 #
 # Return node 4
 
+from collections import deque
+
+class Solution:
+    def searchNode(self, graph: List[Node], values: dict, node:'Node', target:int)->'Node':
+
+        q = deque([node])
+        seen = set()
+        seen.add(node)
+
+        while q:
+            head = q.popleft()
+            if values[head] == target:
+                return head
+
+            for nei in head.neighbors:
+                if nei not in seen:
+                    q.append(nei)
+                    seen.add(nei)
+
+        return None
+
+
+# Follow up: 如何找到所有最近的value=target的点
+# BFS分层
+class Solution:
+    def searchNode(self, graph: List[Node], values: dict, node:'Node', target:int)->List[Node]:
+
+        q = deque([node])
+        seen = set()
+        seen.add(node)
+        res = []
+
+        while q:
+            for i in range(len(q)):
+                node = q.popleft()
+                if values[node] == target:
+                    res.append(node)
+                    for nei in node.neighbors:
+                        if nei not in seen:
+                            q.append(nei)
+                            seen.add(nei)
+            if res:
+                return res
+
+        return None
+
+
