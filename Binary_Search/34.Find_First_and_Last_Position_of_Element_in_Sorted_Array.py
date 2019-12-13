@@ -7,10 +7,11 @@
 """
 
 """
+import bisect
 
 
 # 二次无脑二分模板first and last
-class Solution:
+class Solution1:
 
     def searchRange(self, nums: List[int], target: int) -> List[int]:
 
@@ -49,3 +50,36 @@ class Solution:
             res[1] = end
 
         return res
+
+
+# 用 python bisect
+class Solution2:
+
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+
+        first = bisect.bisect_left(nums, target)
+        last = bisect.bisect(nums, target)
+
+        # the indices will be equal only if the target is not in the list
+        if first == last:
+            return [-1, -1]
+
+        # last是最后一个目标值的下一个位置
+        return [first, last-1]
+
+
+# 机智的方法，只用一种binery search，自己实现binary/bisect都可
+class Solution3:
+
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+
+        first = bisect.bisect_left(nums, target)
+        # 因为有序性
+        last = bisect.bisect_left(nums, target+1)
+
+        # the indices will be equal only if the target is not in the list
+        if first == last:
+            return [-1, -1]
+
+        # last是最后一个目标值的下一个位置
+        return [first, last-1]

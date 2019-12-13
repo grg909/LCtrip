@@ -13,6 +13,9 @@ class Solution:
 
     def peakIndexInMountainArray(self, A: List[int]) -> int:
 
+        if not A:
+            return -1
+
         start, end = 0, len(A) - 1
         while start + 1 < end:
             mid = (start + end) // 2
@@ -21,7 +24,4 @@ class Solution:
             if A[mid - 1] < A[mid]:
                 start = mid
 
-        if A[start - 1] < A[start] and A[start + 1] < A[start]:
-            return start
-        if A[end - 1] < A[end] and A[end + 1] < A[end]:
-            return end
+        return start if A[start] > A[end] else end
