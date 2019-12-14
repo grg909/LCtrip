@@ -11,5 +11,4 @@
 
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        dic1, dic2 = {}, {}
-        for s in s1:
+        pass
