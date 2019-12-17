@@ -29,11 +29,14 @@ class Solution:
         return self.quickSelect(nums, 0, len(nums) - 1, k - 1)
 
     def quickSelect(self, nums, start, end, k):
+        """
+        During the process, it's guaranteed start <= k <= end
+        """
         if start == end:
             return nums[start]
 
         left, right = start, end
-        pivot = nums[(left + right) // 2]
+        pivot = nums[(start + end) // 2]
 
         while left <= right:
             while left <= right and nums[left] < pivot:
@@ -45,10 +48,13 @@ class Solution:
                 left += 1
                 right -= 1
 
-        if right >= k and start <= right:
+        if k <= right:
             return self.quickSelect(nums, start, right, k)
-        elif left <= k and left <= end:
+        if k >= left:
             return self.quickSelect(nums, left, end, k)
+
+        # right < k < left:
+        return nums[k]
 
 
 if __name__ == '__main__':

@@ -28,4 +28,5 @@ class Solution:
                 left += 1
                 right -= 1
 
+        # 当跳出循环时 left > right， 而此时left其实指在原来right区域的第一个值，所以可以保证left的前的所有元素都是<k
         return left
