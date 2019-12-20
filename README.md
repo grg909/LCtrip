@@ -1,4 +1,4 @@
-# LCtrip in # :snake:
+# LCtrip in :snake:
   Code OJ note in python3 - - We care about coding style here ! 白板编程面试模板代码，保证Coding Style前提下，最短最高效
 
 # 前言
@@ -9,7 +9,7 @@
 
 # :trophy: 里程碑
 - 🧬 数据结构
-	- [🐤 Binary Tree](#-%F0%9F%90%A4%20Binary%20Tree)
+	- [🐤 Binary Tree](#-binary-tree)
 
 # 题库解析
 此专栏保证Coding Style前提下，最短最高效
