@@ -10,6 +10,7 @@
 
 from collections import Counter
 
+
 # 计数排序
 # use hash table, Two pass, Time O(n), Space O(n)
 class Solution1:
@@ -64,7 +65,7 @@ class Solution3:
                 nums[left], nums[index] = nums[index], nums[left]
                 left += 1
                 index += 1
-            while index <= ri ght and nums[index] > 1:
+            while index <= right and nums[index] > 1:
                 nums[right], nums[index] = nums[index], nums[right]
                 right -= 1  # 这里不用动index， 易错，因为index还没有check交换过来的数， 而left可以动
                 # index是从left开始的，已经check过所有左边的了
