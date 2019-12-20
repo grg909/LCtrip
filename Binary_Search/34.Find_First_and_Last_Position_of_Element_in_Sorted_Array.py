@@ -10,7 +10,7 @@
 import bisect
 
 
-# 二次无脑二分模板first and last
+# 二次无脑二分模板first and last， Todo：可有更好的coding style
 class Solution1:
 
     def searchRange(self, nums: List[int], target: int) -> List[int]:
@@ -65,7 +65,7 @@ class Solution2:
             return [-1, -1]
 
         # last是最后一个目标值的下一个位置
-        return [first, last-1]
+        return [first, last - 1]
 
 
 # 机智的方法，只用一种binery search，自己实现binary/bisect都可
@@ -75,11 +75,11 @@ class Solution3:
 
         first = bisect.bisect_left(nums, target)
         # 因为有序性
-        last = bisect.bisect_left(nums, target+1)
+        last = bisect.bisect_left(nums, target + 1)
 
         # the indices will be equal only if the target is not in the list
         if first == last:
             return [-1, -1]
 
         # last是最后一个目标值的下一个位置
-        return [first, last-1]
+        return [first, last - 1]

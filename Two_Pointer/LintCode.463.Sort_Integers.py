@@ -33,8 +33,8 @@ class Solution:
         pivot = nums[(start + end) // 2]
 
         # 2. left <= right not <
-        while left <= right:  # not <=
-            while left <= right and nums[left] < pivot:
+        while left <= right:
+            while left <= right and nums[left] < pivot: # not <=
                 left += 1
             while left <= right and nums[right] > pivot:
                 right -= 1

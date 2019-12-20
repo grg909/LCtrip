@@ -52,7 +52,7 @@ class Solution(object):
         return len(seen) == n
 
     def initialisGraph(self, edges):
-        """创建了邻接表（图的表现形式）"""
+        # 创建了邻接表（图的表现形式）
         graph = defaultdict(list)
         for u, v in edges:
             graph[u].append(v)
