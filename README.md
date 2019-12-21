@@ -4,7 +4,7 @@
 # 前言
 - 题目来源包括： LeetCode、LintCode、Cracking the coding interview、ACM challenge workbook(挑战程序设计竞赛)
 - 本项目的target是白板编程时可以清晰简练的手写代码，好的coding style函数名，变量名自解释，而不用大量注释。同时在保证写法最佳情况下，最求代码量最短
-- 项目持续更新中，优先使用 python3，如果您有coding style更有利于面试的写法希望分享的话欢迎联系更新~  
+- 项目持续更新中，使用python3实现，如果您有更符合要求的写法，欢迎提交更新~  
 - 如果您对当前解析有任何疑问，咱们 issue 见~
 
 # :trophy: 里程碑
@@ -20,7 +20,7 @@
 此专栏保证Coding Style前提下，最短最高效。
 
 ### 🐤 Breadth First Search
-- Bfs写法简单清晰，以下是使用场景
+- BFS写法简单清晰，以下是使用场景
 - 图的遍历 Traversal in Graph
     - 层级遍历 Level Order Traversal
     - 由点及面 Connected Component
@@ -28,7 +28,7 @@
 - 最短路径 Shortest Path in Simple Graph
     - 仅限简单图求最短路径
     - 即，图中每条边长度都是1，且没有方向
-- 能够用 BFS 解决的问题，一定 不要用 DFS 去做！
+- 能够用 BFS 解决的问题，一定不要用 DFS 去做！
 
 #### LintCode 618.Search graph nodes
 - Bfs 分层和不分层
@@ -80,7 +80,7 @@ class Solution:
 
 ### 🐑 Binary Tree
 - 碰到二叉树的问题，就想想整棵树在该问题上的结果和左右儿子在该问题上的结果之间的联系是什么
-- Dfs用递归实现分为 Divide Conquer 和 Traverse, Divide Conquer更为简单直接，90%问题可解决
+- DFS用递归实现分为 Divide Conquer 和 Traverse, Divide Conquer更为简单直接，90%二叉树问题可解决
 
 #### 94.Binary Tree inorder traversal
 ```python
@@ -142,7 +142,7 @@ class Solution:
 - 根据要求的时间复杂度倒推求解算法
 
 #### 34. Find First and Last Position of Element in Sorted Array
-- Partition的标准实现
+- 二分法找第一次出现和最后一次出现
 ```python
 # 二次无脑二分模板first and last， Todo：可有更好的coding style
 class Solution1:
@@ -195,7 +195,6 @@ class Solution2:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
 
         first = bisect.bisect_left(nums, target)
-        # 因为有序性
         last = bisect.bisect_left(nums, target + 1)
 
         # the indices will be equal only if the target is not in the list
@@ -207,36 +206,10 @@ class Solution2:
 ```
 
 ### 🦎 Two Pointer
-- 灵活运用quick sort和quick selection中的partition过程
+- 灵活运用quick sort和quick select中的partition过程
 - 对于求 2 个变量如何组合的问题，可以循环其中一个变量，然后研究另外一个变量如何变化
 - 双指针问题也可以考虑hash解，看哪个更符合要求。双指针有同向（一般O(n^2))和异向(一般O(n))。
 - Two sum若干变种，要熟练
-
-#### LintCode 31.Partition array
-- Partition的标准实现
-```python
-class Solution:
-    """
-    @param nums: The integer array you should partition
-    @param k: As description
-    @return: The index after partition
-    """
-
-    def partitionArray(self, nums, k):
-        left, right = 0, len(nums) - 1
-        while left <= right:
-            while left <= right and nums[left] < k:
-                left += 1
-            while left <= right and nums[right] >= k:
-                right -= 1
-            if left <= right:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-                right -= 1
-
-        # 当跳出循环时 left > right， 而此时left其实指在原来right区域的第一个值，所以可以保证left的前的所有元素都是<k
-        return left
-```
 
 #### 215.Kth largest element in an array
 - Quick select的标准实现
@@ -246,7 +219,8 @@ class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         if not nums:
             return -1
-        return self.quickSelect(nums, 0, len(nums) - 1, len(nums) - k) # 举个例子就能发现，kth小和kth大互相转换是len(nums)-k
+        # 举个例子就能发现，kth小和kth大互相转换是len(nums)-k
+        return self.quickSelect(nums, 0, len(nums) - 1, len(nums) - k)
 
     def quickSelect(self, nums, start, end, k):
         """

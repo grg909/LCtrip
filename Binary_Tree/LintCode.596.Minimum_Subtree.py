@@ -5,7 +5,9 @@
 # @Email   : wang.j.au@m.titech.ac.jp
 # @Language: python 3.7
 """
-
+    解题报告：如果divide conquer实现起来不容易，
+    结合traverse来实现会是更好选择。
+    Traverse的特点是不直接得到结果，而是用每层得到的值去更新全局变量
 """
 
 import sys
@@ -24,11 +26,11 @@ class Solution1:
     @param root: the root of binary tree
     @return: the root of the minimum subtree
     """
+    min_sum = sys.maxsize
+    subtree = None
 
     def findSubtree(self, root):
         # write your code here
-        self.minumun_sum = sys.maxsize
-        self.subtree = None
         self.helper(root)
 
         return self.subtree
@@ -41,8 +43,8 @@ class Solution1:
         right_sum = self.helper(root.right)
         root_weight = left_sum + right_sum + root.val
 
-        if root_weight < self.minumun_sum:
-            self.minumun_sum = root_weight
+        if root_weight < self.min_sum:
+            self.min_sum = root_weight
             self.subtree = root
 
         return root_weight

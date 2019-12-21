@@ -16,12 +16,12 @@ class Solution:
             return True
 
         stack = []
-        d = {'(': ')', '[': ']', '{': '}'}
+        dic = {'(': ')', '[': ']', '{': '}'}
 
-        for i in s:
-            if i in '{[(':
-                stack.append(i)
+        for char in s:
+            if char in '{[(':
+                stack.append(char)
             else:
-                if not stack or i != d[stack.pop()]:
+                if not stack or char != dic[stack.pop()]:
                     return False
-        return True
+        return not stack
