@@ -25,7 +25,7 @@ class Solution:
         if not root:
             return []
 
-        res = []
+        res = deque([])
         q = deque([root])
 
         while q:
@@ -37,6 +37,6 @@ class Solution:
                     q.append(node.right)
                     current_layer.append(node.val)
             if current_layer:
-                res.append(current_layer)
+                res.appendleft(current_layer)
 
-        return res[::-1]
+        return res

@@ -36,7 +36,6 @@ class Solution:
                     q.append(node.left)
                     q.append(node.right)
                     current_layer.append(node.val)
-
             if current_layer:
                 res.append(current_layer)
 

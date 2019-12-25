@@ -10,6 +10,7 @@
 """
 from collections import deque
 
+
 # BFS, not recommend for this kind of combination search problem
 class Solution1:
 
@@ -36,12 +37,13 @@ class Solution1:
 
 
 # DFS, 推荐使用的组合类深度搜索模板
+# 通过DFS的过程可以看出，之所以可以避免重复，
+# 是因为dfs安装index逐层深入，index方向固定，不会反向
 class Solution2:
 
     results = []
 
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        nums.sort()
         self.dfs(nums, 0, [])
         return self.results
 
@@ -62,3 +64,31 @@ class Solution2:
         # 不选 nums[index]
         subset.pop()
         self.dfs(nums, index + 1, subset)
+
+
+# DFS template, I prefer this one more
+class Solution3:
+
+    results = []
+
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        self.dfs(nums, 0, [])
+        return self.results
+
+    # 1. 递归的定义
+    # 以subset开头的，配上nums以index开始的数所有组合放到results里
+    def dfs(self, nums, index, subset):
+        # 2.递归的拆解
+        # deep copy
+        self.results.append(list(subset))
+
+        for i in range(index, len(nums)):
+            # for example, [1] -> [1, 2]
+            subset.append(nums[i])
+            # 寻找所有以 [1,2] 开头的集合，并扔到 results
+            self.dfs(nums, i + 1, subset)
+            # [1,2] -> [1] 回溯
+            subset.pop()
+
+        # 3. 递归的出口
+        # return
