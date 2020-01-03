@@ -16,4 +16,3 @@ class Solution:
     @return: return a integer
     """
     def characterReplacement(self, s, k):
-        

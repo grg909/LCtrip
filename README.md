@@ -126,6 +126,114 @@ class Solution:
                 cur = node.left          # reverse process of preorder
         return res
 ```
+
+#### LintCode 578.Lowest Common Ancestor III
+- 这题要注意A和B不一定都在子树里。return多个值来记录A和B是否在子树里存在，以及LCA node。分治法。最后递归结束以后，需要判断是否A和B都存在。
+1. 如果A或B在root上，那么LCA就在root上。
+2. 如果左子树和右子树都有LCA，那么也说明当前LCA在root上。
+3. 如果只有左边有LCA，那么LCA就在左边。
+4. 如果只有右边有LCA，那么LCA就在右边。
+```python
+class Solution:
+    def lowestCommonAncestor3(self, root, A, B):
+        a, b, lca = self.helper(root, A, B)
+        if a and b:
+            return lca
+        else:
+            return None
+
+    def helper(self, root, A, B):
+        if not root:
+            return False, False, None
+
+        left_a, left_b, left_node = self.helper(root.left, A, B)
+        right_a, right_b, right_node = self.helper(root.right, A, B)
+
+        a = left_a or right_a or root == A
+        b = left_b or right_b or root == B
+
+        if root == A or root == B:
+            return a, b, root
+
+        if left_node and right_node:
+            return a, b, root
+        if left_node:
+            return a, b, left_node
+        if right_node:
+            return a, b, right_node
+
+        return a, b, None
+```
+
+#### LintCode 614.Binary Tree Longest Consecutive Sequence II 
+- 分治法。返回多个值来记录从某一个点往下走的时候递增的最大路径和递减的最大路径，以及一个全局的最长路径。在某一点，全局的最长路径就是这三者的最大值:
+1. 左子树中遇到的最长路径
+2. 右子树中遇到的最长路径
+3. 通过当前点的最长路径
+
+```python
+class Solution:
+    def longestConsecutive2(self, root):
+        max_len, _, _ = self.helper(root)
+        return max_len
+
+    def helper(self, root):
+        if not root:
+            return 0, 0, 0
+
+        left_len, left_down, left_up = self.helper(root.left)
+        right_len, right_down, right_up = self.helper(root.right)
+
+        down, up = 0, 0
+        if root.left and root.left.val + 1 == root.val:
+            down = left_down + 1
+        if root.left and root.left.val - 1 == root.val:
+            up = left_up + 1
+        if root.right and root.right.val + 1 == root.val:
+            down = max(down, right_down + 1)
+        if root.right and root.right.val - 1 == root.val:
+            up = max(up, right_up + 1)
+
+        len = down + 1 + up
+        len = max(len, left_len, right_len)
+
+        return len, down, up
+```
+
+#### LintCode 246.Binary Tree Path Sum II
+- 题目要求不一定从root出发，但是一定要从上往下。我们还是从root出发往下traverse。并且维护一边往下走一边把遍历到的点的值放进一个list里。
+- 在当前点，我们做一件事：把当前的list从后往前加，看能不能加到target。如果加到target，说明有一个解。我们把这个解放进result里。全部check完毕以后，我们可以继续往下走了。最后全部traverse结束，我们返回答案的List。
+- 此题是标准的dfs回溯实现模板
+```python
+class Solution:
+    def binaryTreePathSum2(self, root, target):
+        result = []
+        if not root:
+            return result
+        self.helper(root, result, [], target)
+        return result
+
+    def helper(self, root, result, path, target):
+        # 出口
+        if not root:
+            return
+
+        # 本层开始，看看有没有满足要求的放入result
+        path.append(root.val)
+        sum = 0
+        for i in range(len(path)-1, -1, -1):
+            sum += path[i]
+            if sum == target:
+                result.append(path[i:])
+
+        # 抛出以本层作为base的下一层
+        self.helper(root.left, result, path, target)
+        self.helper(root.right, result, path, target)
+
+        # 结束本层，回溯
+        path.pop()
+```
+
 ### 🦌 Binary Search
 - 二分查找是很多其他算法的基础，比如快搜
 - 二分法基本功

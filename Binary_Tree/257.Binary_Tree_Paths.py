@@ -46,7 +46,7 @@ class Solution1:
         return res
 
 
-# Traverse， dfs
+# Traverse， dfs， 作为binary tree问题更推荐的写法
 class Solution2:
 
     def binaryTreePaths(self, root: TreeNode) -> List[str]:
@@ -70,3 +70,38 @@ class Solution2:
             path.append(str(node.right.val))
             self.dfs(node.right, path, result)
             path.pop()
+
+
+# 另一种Traverse， dfs的标准写法
+class Solution3:
+    """
+    @param root: the root of the binary tree
+    @return: all root-to-leaf paths
+    """
+
+    def binaryTreePaths(self, root):
+        if not root:
+            return []
+
+        result = []
+        self.dfs(root, [], result)
+        return result
+
+    def dfs(self, node, path, result):
+        # 出口
+        if not node:
+            return
+
+        # 本层处理
+        path.append(str(node.val))
+        if not node.left and not node.right:
+            result.append('->'.join(path))
+            path.pop()
+            return
+
+        # 以本层为base的下一层
+        self.dfs(node.left, path, result)
+        self.dfs(node.right, path, result)
+
+        # 结束本层
+        path.pop()
