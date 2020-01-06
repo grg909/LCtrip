@@ -16,7 +16,7 @@ class TreeNode:
 """
 
 
-# divide and conquer
+# dfs
 class Solution1:
     """
     @param root: The root of binary tree.
@@ -24,37 +24,59 @@ class Solution1:
     """
 
     def isValidBST(self, root):
-        is_valid, _, _ = self.helper(root)
-        return is_valid
+        return self.helper(root, None, None)
+
+    # 这个方法的定义min_n, max_n是当前root为根的树中
+    # 所有节点中的最大值和最小值
+    def helper(self, root, min_n, max_n):
+        if not root:
+            return True
+
+        if (min_n and root.val <= min_n) or (max_n and root.val >= max_n):
+            return False
+
+        return self.helper(root.left, min_n, root.val) and self.helper(
+            root.right, root.val, max_n)
+
+
+# divide and conquer, 此法简单直接
+class Solution2:
+    """
+    @param root: The root of binary tree.
+    @return: True if the binary tree is BST, or false
+    """
+
+    def isValidBST(self, root):
+        is_bst, _, _ = self.helper(root)
+        return is_bst
 
     def helper(self, root):
         if not root:
             return True, None, None
 
-        if not root.left and not root.right:
-            return True, root.val, root.val
+        is_left, left_min, left_max = self.helper(root.left)
+        is_right, right_min, right_max = self.helper(root.right)
 
-        is_left, left_max, left_min = self.helper(root.left)
-        is_right, right_max, right_min = self.helper(root.right)
-
-        is_valid = True
+        # 只要判定False情况就不用管最大最小值了，因为只有出现
+        # 一个subtree非BST，整个tree都不是BST了
         if not is_left or not is_right:
-            is_valid = False
+            return False, None, None
         if left_max and left_max >= root.val:
-            is_valid = False
-        if right_min and right_min <= root.val:
-            is_valid = False
-        if not left_max:
-            left_max, left_min = root.val, root.val
-        if not right_max:
-            right_max, right_min = root.val, root.val
+            return False, None, None
+        if right_min and root.val >= right_min:
+            return False, None, None
 
-        return is_valid, max(left_max, right_max,
-                             root.val), min(left_min, right_min, root.val)
+        # is BST
+        min_tree = left_min if left_min else root.val
+        max_tree = right_max if right_max else root.val
+
+        return True, min_tree, max_tree
 
 
-# Traverse, easier
-class Solution2:
+# Traverse
+# 每次用当前节点和左子树遍历过的最后一个节点做比较。
+# 如果最后一个节点的值小，就说明这不是一个BST。因为BST的任何一个节点比左边大。
+class Solution3:
     """
     @param root: The root of binary tree.
     @return: True if the binary tree is BST, or false

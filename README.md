@@ -31,13 +31,12 @@
 - 能够用 BFS 解决的问题，一定不要用 DFS 去做！
 
 #### LintCode 618.Search graph nodes
-- Bfs 分层和不分层
+- Bfs分层和不分层
 ```python
 from collections import deque
 
 class Solution:
     def searchNode(self, graph: List[Node], values: dict, node:'Node', target:int)->'Node':
-
         q = deque([node])
         seen = set()
         seen.add(node)
@@ -57,7 +56,6 @@ class Solution:
 # Follow up: 如何找到所有最近的value=target的点: BFS分层
 class Solution:
     def searchNode(self, graph: List[Node], values: dict, node:'Node', target:int)->List[Node]:
-
         q = deque([node])
         seen = set()
         seen.add(node)
@@ -78,6 +76,94 @@ class Solution:
         return None
 ```
 
+#### LintCode 137.Clone Graph
+1. node -> nodes, bfs找出所有点
+2. copy nodes, 建立新老节点的mapping关系
+3. copy edges, 遍历老节点，根据老节点的关联关系来连接新节点
+```python
+from collections import deque
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        root = node
+        if node is None:
+            return node
+
+        # use bfs to traverse the graph and get all old nodes
+        nodes = self.getNodes(node)
+
+        # copy nodes, create a mapping dict from old->new
+        mapping = {}
+        for node in nodes:
+            mapping[node] = Node(node.val, [])
+
+        # copy edges
+        for node in nodes:
+            new_node = mapping[node]
+            for neighbor in node.neighbors:
+                new_neighbor = mapping[neighbor]
+                new_node.neighbors.append(new_neighbor)
+
+        return mapping[root]
+
+    def getNodes(self, node: 'Node') -> 'set':
+        results = set([node])
+        q = deque([node])
+        while q:
+            head = q.popleft()
+            if head:
+                for neighbor in head.neighbors:
+                    if neighbor not in results:
+                        results.add(neighbor)
+                        q.append(neighbor)
+        return results
+```
+
+#### LintCode 615.Course Schedule
+1. no graph presentation: so build graph first
+2. count and get the indegree of nodes
+3. BFS topological sorting, start from the node with 0 indegree
+4. if the graph can be topological sort, then return true
+```python
+from collections import deque
+
+class Solution:
+    def canFinish(self, numCourses: int,
+                  prerequisites: List[List[int]]) -> bool:
+        graph = self.build_graph(numCourses, prerequisites)
+        indegree = self.get_degree(numCourses, prerequisites)
+
+        start_nodes = [n for n in graph.keys() if indegree[n] == 0]
+        count = 0
+        q = deque(start_nodes)
+
+        while q:
+            node = q.popleft()
+            count += 1
+            for edge in graph[node]:
+                indegree[edge] -= 1
+                if indegree[edge] == 0:
+                    q.append(edge)
+
+        return count == numCourses
+
+    def build_graph(self, numCourses, prerequisites):
+        graph = {i: [] for i in range(numCourses)}
+
+        for edge in prerequisites:
+            graph[int(edge[1])].append(edge[0])
+
+        return graph
+
+    def get_degree(self, numCourses, prerequisites):
+        indegree = [0] * numCourses
+
+        for edge in prerequisites:
+            indegree[int(edge[0])] += 1
+
+        return indegree
+```
+
 ### 🐑 Binary Tree
 - 碰到二叉树的问题，就想想整棵树在该问题上的结果和左右儿子在该问题上的结果之间的联系是什么
 - DFS用递归实现分为 Divide Conquer 和 Traverse, Divide Conquer更为简单直接，90%二叉树问题可解决
@@ -86,7 +172,6 @@ class Solution:
 ```python
 # Non-recursion
 class Solution:
-
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         res = []
         stack = []
@@ -110,7 +195,6 @@ from collections import deque
 
 # Use deque, non-recursion
 class Solution:
-
     def postorderTraversal(self, root: TreeNode) -> List[int]:
         res = deque([])
 
@@ -234,6 +318,131 @@ class Solution:
         path.pop()
 ```
 
+#### LintCode 95.Validate Binary Search Tree
+- 以下几道是BST典型题
+```python
+# Divide and Conquer
+class Solution1:
+    def isValidBST(self, root):
+        is_bst, _, _ = self.helper(root)
+        return is_bst
+
+    def helper(self, root):
+        if not root:
+            return True, None, None
+
+        is_left, left_min, left_max = self.helper(root.left)
+        is_right, right_min, right_max = self.helper(root.right)
+
+        # 只要判定False情况就不用管最大最小值了，因为只有出现
+        # 一个subtree非BST，整个tree都不是BST了
+        if not is_left or not is_right:
+            return False, None, None
+        if left_max and left_max >= root.val:
+            return False, None, None
+        if right_min and root.val >= right_min:
+            return False, None, None
+
+        # is BST
+        min_tree = left_min if left_min else root.val
+        max_tree = right_max if right_max else root.val
+
+        return True, min_tree, max_tree
+
+# Traverse
+# 每次用当前节点和左子树遍历过的最后一个节点做比较。
+# 如果最后一个节点的值小，就说明这不是一个BST。因为BST的任何一个节点比左边大。
+class Solution2:
+    last_val = None
+    is_valid = True
+
+    def isValidBST(self, root):
+        self.helper(root)
+        return self.is_valid
+
+    def helper(self, root):
+        if not root:
+            return
+        self.helper(root.left)
+        if self.last_val and self.last_val >= root.val:
+            self.is_valid = False
+            return
+        self.last_val = root.val
+        self.helper(root.right)
+```
+
+#### LintCode 448.Inorder Successor in BST
+```python
+# 结合BST的特点
+class Solution1:
+    def inorderSuccessor(self, root, p):
+        if not root:
+            return None
+
+        if root.val <= p.val:
+            return self.inorderSuccessor(root.right, p)
+
+        left = self.inorderSuccessor(root.left, p)
+        if left:
+            return left
+        else:
+            return root
+
+# stack迭代，套用中序模板
+class Solution2:
+    def inorderSuccessor(self, root, p):
+        stack = []
+        cur = root
+        flag = False
+
+        while cur or stack:
+            if cur:
+                stack.append(cur)
+                cur = cur.left
+            else:
+                cur = stack.pop()
+                if flag:
+                    return cur
+                if cur == p:
+                    flag = True
+                cur = cur.right
+        return None
+```
+
+#### LintCode 87.Remove Node in Binary Search Tree
+```python
+# 重点是build新BST的方法
+class Solution:
+    ans = []
+
+    def removeNode(self, root, value):
+        self.inorder(root, value)
+        return self.build(0, len(self.ans) - 1)
+
+    def inorder(self, root, value):
+        if not root:
+            return
+
+        self.inorder(root.left, value)
+        if root.val != value:
+            self.ans.append(root.val)
+        self.inorder(root.right, value)
+
+    def build(self, left, right):
+        if left == right:
+            node = TreeNode(self.ans[left])
+            return node
+
+        if left > right:
+            return None
+
+        mid = (left + right) // 2
+        node = TreeNode(self.ans[mid])
+        node.left = self.build(left, mid - 1)
+        node.right = self.build(mid + 1, right)
+        return node
+```
+
 ### 🦌 Binary Search
 - 二分查找是很多其他算法的基础，比如快搜
 - 二分法基本功
@@ -254,7 +463,6 @@ class Solution:
 ```python
 # 二次无脑二分模板first and last， Todo：可有更好的coding style
 class Solution1:
-
     def searchRange(self, nums: List[int], target: int) -> List[int]:
 
         res = [-1, -1]
@@ -299,7 +507,6 @@ class Solution1:
 import bisect
 
 class Solution2:
-
     def searchRange(self, nums: List[int], target: int) -> List[int]:
 
         first = bisect.bisect_left(nums, target)
@@ -323,7 +530,6 @@ class Solution2:
 - Quick select的标准实现
 ```python
 class Solution:
-
     def findKthLargest(self, nums: List[int], k: int) -> int:
         if not nums:
             return -1
@@ -363,11 +569,6 @@ class Solution:
 - Quick sort的标准实现
 ```python
 class Solution:
-    """
-    @param nums: A list of integer which is 0, 1 or 2
-    @return: nothing
-    """
-
     def sortColors(self, nums):
         if not nums:
             return
@@ -402,11 +603,6 @@ class Solution:
 - K sum问题的标准解法，很好的coding style
 ```python
 class Solution:
-    """
-    @param numbers: Give an array numbers of n integer
-    @return: Find all unique triplets in the array which gives the sum of zero.
-    """
-
     def threeSum(self, nums):
         if not nums or len(nums) < 3:
             return []

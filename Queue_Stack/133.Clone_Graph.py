@@ -58,19 +58,3 @@ class Solution:
                         results.add(neighbor)
                         q.append(neighbor)
         return results
-
-
-# DFS
-class Solution2:
-
-    def cloneGraph(self, node: 'Node') -> 'Node':
-        d = {}
-
-        def dfs(old):
-            if old not in d:
-                # 每遍历一个新节点就创建一个副本到哈希表
-                d[old] = new = Node(old.val, None)
-                new.neighbors = [*map(dfs, old.neighbors)]
-            return d[old]
-
-        return dfs(node)
