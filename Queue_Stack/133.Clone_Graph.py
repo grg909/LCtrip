@@ -52,9 +52,8 @@ class Solution:
         q = deque([node])
         while q:
             head = q.popleft()
-            if head:
-                for neighbor in head.neighbors:
-                    if neighbor not in results:
-                        results.add(neighbor)
-                        q.append(neighbor)
+            for neighbor in head.neighbors:
+                if neighbor not in results:
+                    results.add(neighbor)
+                    q.append(neighbor)
         return results

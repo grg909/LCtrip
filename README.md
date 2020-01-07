@@ -9,7 +9,8 @@
 
 # :trophy: 里程碑
 - 🧬 版图
-	- [🐤 Breadth First Search](#-bfs)
+	- [🐤 Breadth First Search](#-breadth-first-search)
+	- [🐈 Linked List](#-linked-list)
 	- [🐑 Binary Tree](#-binary-tree)
 	- [🦌 Binary Search](#-binary-search)
 	- [🦎 Two Pointer](#-two-pointer)
@@ -111,11 +112,11 @@ class Solution:
         q = deque([node])
         while q:
             head = q.popleft()
-            if head:
-                for neighbor in head.neighbors:
-                    if neighbor not in results:
-                        results.add(neighbor)
-                        q.append(neighbor)
+            for neighbor in head.neighbors:
+                if neighbor not in results:
+                    results.add(neighbor)
+                    q.append(neighbor)
+
         return results
 ```
 
@@ -162,6 +163,68 @@ class Solution:
             indegree[int(edge[0])] += 1
 
         return indegree
+```
+
+### 🐈 Linked List
+- 熟悉基本操作，把复杂问题拆解为基本操作的组合
+- 两个技巧：Dummy head 和 Two pointer (快慢指针)
+
+#### LintCode 450.Reverse Nodes in k-Group
+- 拆解为链表基本操作
+- 可以在函数注释处写上链表的变化，避免出错
+```python
+class Solution:
+    def reverseKGroup(self, head, k):
+        """
+        # dummy->[1->2->3]->[4->5->6]->7 (k = 3)
+        # dummy->[3->2->1]->[6->5->4]->7
+        """
+        dummy = ListNode(-1)
+        dummy.next = head
+
+        pre = dummy
+        while pre:
+            pre = self.reverse_next_k_node(pre, k)
+
+        return dummy.next
+
+    def reverse_next_k_node(self, pre, k):
+        """
+        原：pre -> n1 -> n2 -> ... -> nk -> nk+1
+        现：pre -> nk -> nk-1 -> ... -> n1 -> nk+1
+        return n1
+        """
+        n1 = pre.next
+        nk = self.find_kth_node(pre, k)
+        if not nk:
+            return None
+        nk_plus = nk.next
+
+        nk.next = None
+        self.reverse(n1)
+        pre.next = nk
+        n1.next = nk_plus
+
+        return n1
+
+    def find_kth_node(self, pre, k):
+        # pre -> n1 -> n2 -> ... -> nk
+        cur = pre
+        while k:
+            cur = cur.next
+            if not cur:
+                return None
+            k -= 1
+        return cur
+
+    def reverse(self, head):
+        pre = None
+        cur = head
+        while cur:
+            tmp = cur.next
+            cur.next = pre
+            pre = cur
+            cur = tmp
 ```
 
 ### 🐑 Binary Tree
