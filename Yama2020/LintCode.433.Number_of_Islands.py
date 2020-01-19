@@ -5,7 +5,8 @@
 # @Email   : wang.j.au@m.titech.ac.jp
 # @Language: python 3.7
 """
-
+    解题报告：python避免用二维数组，容易出现浅拷贝的坑，
+    最好用dict，mapping[(i, j)]
 """
 
 from collections import deque
