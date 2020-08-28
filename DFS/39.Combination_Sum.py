@@ -24,11 +24,12 @@ class Solution:
         # 3. 递归的出口
         if target == 0:
             results.append(list(combination))
+            return
 
         # 2. 递归的拆解
         for i in range(startIndex, len(candidates)):
             if candidates[i] > target:
-                break
+                return
             combination.append(candidates[i])
             self.dfs(candidates, i, combination, target - candidates[i],
                      results)

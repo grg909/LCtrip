@@ -14,7 +14,8 @@ from collections import deque
 
 
 class Solution:
-    def numIslands(self, grid: List[List[str]]) -> int:
+
+    def numIslands(self, grid) -> int:
 
         try:
             m = len(grid)
@@ -51,8 +52,9 @@ class Solution:
 
 
 # DFS
-class Solution:
-    def numIslands(self, grid: List[List[str]]) -> int:
+class Solution2:
+
+    def numIslands(self, grid) -> int:
         try:
             m = len(grid)
             n = len(grid[0])
@@ -76,3 +78,49 @@ class Solution:
                     r += 1
                     dfs(i, j)
         return r
+
+
+from collections import deque
+
+
+class Solution3:
+
+    def numIslands(self, grid) -> int:
+        if not grid or not grid[0]:
+            return 0
+
+        island = 0
+        visited = set()
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if int(grid[i][j]) and (i, j) not in visited:
+                    self.bfs(grid, i, j, visited)
+                    island += 1
+
+        print(island)
+        return island
+
+    def bfs(self, grid, x, y, visited):
+        queue = deque([(x, y)])
+        visited.add((x, y))
+        while queue:
+            x, y = queue.popleft()
+            for delta_x, delta_y in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                next_x = x + delta_x
+                next_y = y + delta_y
+                if self.is_valid(grid, next_x, next_y, visited):
+                    queue.append((next_x, next_y))
+                    visited.add((next_x, next_y))
+
+    def is_valid(self, grid, x, y, visited):
+        n, m = len(grid), len(grid[0])
+        if not (0 <= x < n and 0 <= y < m):
+            return False
+        if (x, y) in visited:
+            return False
+        return int(grid[x][y]) == 1
+
+if __name__ == '__main__':
+    a = Solution3()
+    a.numIslands([["1", "1", "0", "0", "0"], ["1", "1", "0", "0", "0"],
+                  ["0", "0", "1", "0", "0"], ["0", "0", "0", "1", "1"]])

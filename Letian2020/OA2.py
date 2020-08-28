@@ -18,20 +18,17 @@ class Solution:
 
     def numberOfArithmeticSlices(self, A: list) -> int:
         size = len(A)
-        if size in (0, 1, 2):
+        if size < 3:
             return 0
 
-        t = [A[i] - A[i - 1] for i in range(1, size)]
         dp = [0 for i in range(size)]
         for i in range(2, size):
-            if t[i - 2] == t[i - 1]:
+            if (A[i] - A[i - 1]) == (A[i - 1] - A[i - 2]):
                 dp[i] = dp[i - 1] + 1
-            else:
-                dp[i] = 0
 
         return sum(dp)
 
 
 if __name__ == '__main__':
     a = Solution()
-    a.numberOfArithmeticSlices([-1, 1, 3, 3, 3, 2, 3, 2, 1, 0])
+    print(a.numberOfArithmeticSlices([-1, 1, 3, 3, 3, 2, 3, 2, 1, 0]))
